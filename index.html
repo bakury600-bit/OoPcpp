@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<title>OOP C++ | مراجعة المرحلة الثانية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;600&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Cairo', 'Inter', 'sans-serif'],
+        mono: ['Fira Code', 'Consolas', 'monospace'],
+      },
+      colors: {
+        brand: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+          900: '#312e81',
+        }
+      }
+    }
+  }
+}
+</script>
+<style>
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.6); }
+
+  /* Code Syntax Highlighting */
+  .cpp-kw { color: #c084fc; font-weight: 600; }
+  .cpp-type { color: #38bdf8; }
+  .cpp-str { color: #4ade80; }
+  .cpp-num { color: #fb923c; }
+  .cpp-com { color: #64748b; font-style: italic; }
+  .cpp-fn { color: #facc15; }
+  .cpp-pp { color: #f472b6; }
+
+  /* Smooth Tab Transitions */
+  .section { display: none; animation: fadeIn 0.25s ease-out; }
+  .section.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Print Styles */
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff !important; color: #000 !important; }
+    .section { display: block !important; page-break-after: always; }
+    pre { background: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; white-space: pre-wrap !important; }
+    .cpp-kw, .cpp-type, .cpp-str, .cpp-num, .cpp-fn, .cpp-pp { color: #0f172a !important; }
+    .answer { display: block !important; background: #f1f5f9 !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-indigo-500 selection:text-white">
+
+<!-- Top Sticky Header -->
+<header class="no-print sticky top-0 z-40 h-16 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+  <div class="max-w-[1440px] mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-3">
+    <!-- Brand & Mobile Menu Button -->
+    <div class="flex items-center gap-3">
+      <button id="menuToggle" aria-label="فتح القائمة" class="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-700 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white flex items-center justify-center font-mono font-bold text-sm shadow-md shadow-indigo-500/20" dir="ltr">C++</div>
+        <div>
+          <div class="font-black text-base sm:text-lg tracking-tight text-slate-900 dark:text-white leading-none">OOP <span class="text-indigo-600 dark:text-indigo-400">STUDY</span></div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-0.5" data-ar="مراجعة المرحلة الثانية" data-en="Stage 2 Review">مراجعة المرحلة الثانية</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header Controls -->
+    <div class="flex items-center gap-2">
+      <!-- Theme Toggle -->
+      <button id="themeBtn" onclick="toggleTheme()" title="تبديل المظهر" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-indigo-400 dark:hover:border-indigo-500 transition">
+        <svg id="sunIcon" class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        <svg id="moonIcon" class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+      </button>
+
+      <!-- Language Toggle -->
+      <button id="langBtn" onclick="toggleLang()" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:border-indigo-300 transition">
+        English
+      </button>
+
+      <!-- Print Button -->
+      <button onclick="window.print()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm shadow-indigo-500/20 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        <span data-ar="طباعة" data-en="Print">طباعة</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Backdrop -->
+<div id="mobileBackdrop" onclick="closeMobileMenu()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden lg:hidden"></div>
+
+<!-- Main Layout Shell -->
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-[270px_minmax(0,1fr)] gap-6">
+
+  <!-- Sidebar Navigation -->
+  <aside id="sidebar" class="no-print fixed lg:sticky top-16 lg:top-22 bottom-0 right-0 z-50 lg:z-10 w-72 lg:w-auto bg-white dark:bg-slate-900 border-l lg:border border-slate-200 dark:border-slate-800 lg:rounded-2xl p-4 flex flex-col justify-between transition-transform duration-300 translate-x-full lg:translate-x-0 lg:self-start lg:max-h-[calc(100vh-6.5rem)] overflow-y-auto shadow-2xl lg:shadow-sm">
+    <div>
+      <div class="px-3 pb-3 mb-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-mono font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">STUDY MENU</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold" data-ar="أقسام المراجعة الشاملة" data-en="Complete Review Sections">أقسام المراجعة الشاملة</div>
+        </div>
+        <button onclick="closeMobileMenu()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white">✕</button>
+      </div>
+
+      <nav class="space-y-1.5" id="navButtons">
+        <button class="nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-500/20" data-target="summary">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs opacity-80">01</span> <span data-ar="📘 الملخص الشامل" data-en="📘 Complete Summary">📘 الملخص الشامل</span></span>
+          <span class="text-[11px] px-2 py-0.5 rounded-md bg-white/20">7 Lec</span>
+        </button>
+
+        <button class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all" data-target="mcq">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs text-slate-400">02</span> <span data-ar="📝 أسئلة MCQ" data-en="📝 MCQ Quiz">📝 أسئلة MCQ</span></span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">75</span>
+        </button>
+
+        <button class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all" data-target="debug">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs text-slate-400">03</span> <span data-ar="🛠 تصحيح البرامج" data-en="🛠 Debugging">🛠 تصحيح البرامج</span></span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">31</span>
+        </button>
+
+        <button class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all" data-target="output">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs text-slate-400">04</span> <span data-ar="💻 نواتج البرامج" data-en="💻 Code Output">💻 نواتج البرامج</span></span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">30</span>
+        </button>
+
+        <button class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all" data-target="tf">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs text-slate-400">05</span> <span data-ar="✔ صح وخطأ" data-en="✔ True / False">✔ صح وخطأ</span></span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">30</span>
+        </button>
+
+        <button class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all" data-target="programs">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs text-slate-400">06</span> <span data-ar="📚 برامج المواضيع" data-en="📚 Topic Programs">📚 برامج المواضيع</span></span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">110</span>
+        </button>
+
+        <button class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all" data-target="classes">
+          <span class="flex items-center gap-2.5"><span class="font-mono text-xs text-slate-400">07</span> <span data-ar="🏛 برامج Classes" data-en="🏛 Class Programs">🏛 برامج Classes</span></span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">30</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Progress Widget in Sidebar -->
+    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+      <div class="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-3">
+        <div class="flex items-center justify-between text-xs font-bold mb-1.5">
+          <span class="text-slate-600 dark:text-slate-300" data-ar="تقدم اختبار MCQ" data-en="MCQ Progress">تقدم اختبار MCQ</span>
+          <span id="mcqProgressText" class="font-mono text-indigo-600 dark:text-indigo-400">0 / 76</span>
+        </div>
+        <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div id="mcqProgressBar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <div class="flex items-center justify-between mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+          <span><span data-ar="الإجابات الصحيحة:" data-en="Correct:">الإجابات الصحيحة:</span> <strong id="mcqScoreText" class="text-emerald-600 dark:text-emerald-400">0</strong></span>
+          <button onclick="resetMcqProgress()" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold" data-ar="إعادة" data-en="Reset">إعادة</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="min-w-0 space-y-6">
+
+    <!-- Hero Banner + Dashboard Stats -->
+    <section class="no-print relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-lg border border-indigo-500/20">
+      <div class="absolute -left-10 -bottom-12 font-mono font-black text-[130px] text-white/[0.03] select-none pointer-events-none" dir="ltr">OOP++</div>
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-mono font-semibold mb-3">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            C++ · OBJECT ORIENTED PROGRAMMING
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight mb-2" data-ar="مراجعتك الكاملة لمادة OOP" data-en="Complete OOP C++ Study Guide">
+            مراجعتك الكاملة لمادة OOP
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-ar="ملخصات مركزة للمحاضرات السبع، أمثلة عملية، وبنك أسئلة تفاعلي شامل لتتقن البرمجة كائنية التوجه بوضوح." data-en="Concise summaries for all 7 lectures, practical examples, and an interactive question bank to master C++ OOP.">
+            ملخصات مركزة للمحاضرات السبع، أمثلة عملية، وبنك أسئلة تفاعلي شامل لتتقن البرمجة كائنية التوجه بوضوح.
+          </p>
+        </div>
+
+        <!-- Quick Stats Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-2.5 shrink-0">
+          <div class="bg-white/10 backdrop-blur-xs border border-white/10 rounded-xl p-3 text-center">
+            <div class="font-mono font-black text-xl text-indigo-300">7</div>
+            <div class="text-[11px] text-slate-300 font-semibold" data-ar="محاضرات" data-en="Lectures">محاضرات</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xs border border-white/10 rounded-xl p-3 text-center">
+            <div class="font-mono font-black text-xl text-emerald-300">167</div>
+            <div class="text-[11px] text-slate-300 font-semibold" data-ar="سؤال تفاعلي" data-en="Questions">سؤال تفاعلي</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xs border border-white/10 rounded-xl p-3 text-center">
+            <div class="font-mono font-black text-xl text-amber-300">140</div>
+            <div class="text-[11px] text-slate-300 font-semibold" data-ar="برنامج محلول" data-en="Programs">برنامج محلول</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xs border border-white/10 rounded-xl p-3 text-center">
+            <div class="font-mono font-black text-xl text-sky-300">100%</div>
+            <div class="text-[11px] text-slate-300 font-semibold" data-ar="منهج شامل" data-en="Coverage">منهج شامل</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-8 shadow-xs">
+
+      <!-- SECTION 1: SUMMARY -->
+      <section id="summary" class="section active space-y-6">
+        <!-- Learning Roadmap Card -->
+        <div class="rounded-2xl bg-gradient-to-br from-indigo-50/80 to-slate-50 dark:from-indigo-950/30 dark:to-slate-800/40 border border-indigo-100 dark:border-indigo-900/50 p-5 sm:p-6">
+          <div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-extrabold text-lg mb-2">
+            <span>🗺️</span>
+            <h3>خارطة الطريق | Learning Roadmap</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">ابدأ بفهم الدوال، ثم انتقل إلى مفاهيم البرمجة كائنية التوجه، وبعدها تعلّم بناء الكلاسات والكائنات وتطبيقها في برامج عملية.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 shadow-2xs hover:border-indigo-400 transition">
+              <div class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 mb-1">STEP 01</div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-1">Functions</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">الدوال، prototype، overloading، reference والمعاملات الافتراضية.</p>
+            </div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 shadow-2xs hover:border-indigo-400 transition">
+              <div class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 mb-1">STEP 02</div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-1">OOP Concepts</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Object، Encapsulation، Inheritance، Polymorphism.</p>
+            </div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 shadow-2xs hover:border-indigo-400 transition">
+              <div class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 mb-1">STEP 03</div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-1">Classes</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">تعريف الكلاس، access specifiers، constructors وmember functions.</p>
+            </div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 shadow-2xs hover:border-indigo-400 transition">
+              <div class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 mb-1">STEP 04</div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-1">Practice</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">طبّق، صحّح الأخطاء، تتبّع النواتج، واختبر فهمك.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <span class="w-1.5 h-7 rounded-full bg-indigo-600"></span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">الملخص الشامل | Complete Summary</h2>
+        </div>
+
+        <!-- Lecture Cards -->
+        <div class="space-y-5">
+          <!-- Lecture 1 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 1 — C++ Functions</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">01</span>
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 dark:text-slate-300 mb-3 leading-relaxed">
+              <strong class="text-slate-900 dark:text-white">Function:</strong> جزء من كود C++ ينفذ مهمة محددة وله اسم وصفي، وقد يعيد قيمة. يساعد أسلوب <strong class="text-slate-900 dark:text-white">Top-down design</strong> على تقسيم المشكلة الكبيرة إلى مهام أصغر.
+            </p>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li><strong class="text-slate-800 dark:text-slate-200">Standard functions:</strong> دوال جاهزة ضمن مكتبات؛ دوال الرياضيات في <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">&lt;cmath&gt;</code> مثل <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">pow(x,5)</code>.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">User-defined function:</strong> دالة يكتبها المبرمج. تتكون من Function Header وFunction Body.</li>
+              <li>الصيغة: <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">return_type functionName(parameter_list) { statements; return value; }</code></li>
+              <li><code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">void</code> تعني أن الدالة لا تعيد قيمة. مثال: <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">void show()</code>.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Prototype:</strong> تصريح يعرّف المترجم باسم الدالة ونوعها ومعاملاتها قبل استخدامها.</li>
+            </ul>
+            <div class="code-box" data-code="double computeTax(double income) {
+    if (income < 5000.0) return 0.0;
+    return 0.07 * (income - 5000.0);
+}"></div>
+          </article>
+
+          <!-- Lecture 2 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 2 — Conditional Operator &amp; Default Parameters</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">02</span>
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 dark:text-slate-300 mb-3 leading-relaxed">
+              <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">condition ? expression1 : expression2</code> هو ternary operator؛ ينفذ التعبير الأول إذا الشرط true وإلا ينفذ الثاني. مثال: <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">x = (y &lt; z) ? y : z;</code>
+            </p>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li><strong class="text-slate-800 dark:text-slate-200">Default parameter:</strong> قيمة افتراضية لمعامل عند عدم تمرير قيمة له.</li>
+              <li>المعاملات الافتراضية تكون في نهاية قائمة المعاملات فقط (trailing arguments).</li>
+              <li>مثال: <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">int power(int n, int k=2)</code>؛ الاستدعاء <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">power(5)</code> يستخدم k=2.</li>
+              <li>يجب أن يكون Prototype للدالة قبل استخدامها إذا كان تعريفها لاحقاً.</li>
+            </ul>
+            <div class="code-box" data-code="int power(int n, int k = 2) {
+    int result = 1;
+    for (int i = 0; i < k; i++) result *= n;
+    return result;
+}"></div>
+          </article>
+
+          <!-- Lecture 3 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 3 — OOP Concepts, Overloading, Reference</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">03</span>
+            </div>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li><strong class="text-slate-800 dark:text-slate-200">Object:</strong> كيان/نوع بيانات يضم خصائص (data) ودوال (methods)، ويمكن تمثيل شخص أو مكان أو حساب مصرفي.</li>
+              <li>مبادئ OOP المذكورة: Encapsulation, Inheritance, Polymorphism.</li>
+              <li>فوائد OOP: Modularity, Information hiding, Code reuse, Easier debugging.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Function overloading:</strong> عدة دوال بالاسم نفسه مع اختلاف عدد أو أنواع المعاملات. الاختلاف بنوع الإرجاع فقط غير مسموح.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Call by reference:</strong> استخدام <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">&amp;</code> في معامل الدالة للتعامل مع المتغير الأصلي؛ التغيير يظهر خارج الدالة. أما call by value فيعدل نسخة فقط.</li>
+            </ul>
+            <div class="code-box" data-code="void changeIt(int &p) { p = p + 2; }
+void normal(int p) { p = 7; }
+int main() {
+    int j = 4;
+    changeIt(j);
+    normal(j);
+    cout << j; // 6
+}"></div>
+          </article>
+
+          <!-- Lecture 4 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 4 — Structures and Classes</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">04</span>
+            </div>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li><strong class="text-slate-800 dark:text-slate-200">Array:</strong> يخزن عناصر من النوع نفسه في مواقع متجاورة.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Structure:</strong> نوع يعرّفه المستخدم لتجميع بيانات قد تكون من أنواع مختلفة، ويُنشأ باستخدام <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">struct</code>.</li>
+              <li>يمكن أن يحتوي struct على Data Members وMember Functions.</li>
+              <li>أعضاء <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">struct</code> تكون public افتراضياً، بينما أعضاء <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">class</code> تكون private افتراضياً.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">public:</strong> يمكن الوصول إليه من خارج الكلاس. <strong class="text-slate-800 dark:text-slate-200">private:</strong> الوصول المباشر له من خارج الكلاس ممنوع. <strong class="text-slate-800 dark:text-slate-200">protected:</strong> متاح للكلاس والكلاسات المشتقة، وليس عبر object عادي.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Encapsulation:</strong> جمع البيانات والدوال ضمن وحدة واحدة. <strong class="text-slate-800 dark:text-slate-200">Data hiding:</strong> تقييد الوصول المباشر للبيانات، عادة باستخدام private ودوال public.</li>
+            </ul>
+            <div class="code-box" data-code="class Point {
+private:
+    int x, y;
+public:
+    void init(int a, int b) { x = a; y = b; }
+    void print() { cout << &quot;(&quot; << x << &quot;,&quot; << y << &quot;)&quot;; }
+};"></div>
+          </article>
+
+          <!-- Lecture 5 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 5 — Classes, Objects, Static Members</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">05</span>
+            </div>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li>الكلاس مخطط (blueprint) لإنشاء objects؛ والـ object هو instance من class.</li>
+              <li>الدوال المعرفة داخل class تكون inline افتراضياً؛ يمكن تعريف الدالة خارجه باستخدام <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">ClassName::function()</code>.</li>
+              <li><code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">::</code> هو Scope Resolution Operator.</li>
+              <li>Getter/Accessor لقراءة البيانات، وSetter لتعيينها أو تعديلها.</li>
+              <li>يمكن عمل overloading لدوال الأعضاء.</li>
+              <li>يمكن أن يحتوي class على object من class آخر.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">static data member:</strong> نسخة واحدة مشتركة بين جميع objects من الكلاس، ويُفضّل الوصول لها باسم الكلاس مثل <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">P::c</code>.</li>
+            </ul>
+            <div class="code-box" data-code="class P {
+public:
+    static char c;
+};
+char P::c = 'W';
+int main() {
+    P a, b;
+    P::c = 'A';
+    cout << a.c << b.c; // AA
+}"></div>
+          </article>
+
+          <!-- Lecture 6 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 6 — Encapsulation &amp; Data Hiding (Part 2)</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">06</span>
+            </div>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li>Encapsulation يجمع data members وmember functions داخل class واحد.</li>
+              <li>Data hiding يمنع التعديل المباشر على البيانات الداخلية من خارج الكلاس.</li>
+              <li>تُستخدم public functions مثل <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">setData()</code> و<code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">display()</code> للتحكم بالوصول.</li>
+              <li>يمكن التحقق من صحة القيم قبل تخزينها، مثل رفض إيداع مبلغ غير موجب أو سحب مبلغ أكبر من الرصيد.</li>
+              <li>الفرق: Encapsulation = grouping؛ Data hiding = access restriction.</li>
+            </ul>
+            <div class="code-box" data-code="class BankAccount {
+private:
+    double balance;
+public:
+    BankAccount() : balance(0) {}
+    void deposit(double amount) {
+        if (amount > 0) balance += amount;
+    }
+    double getBalance() { return balance; }
+};"></div>
+          </article>
+
+          <!-- Lecture 7 -->
+          <article class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 sm:p-6 hover:border-indigo-300 dark:hover:border-indigo-800 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h3 class="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Lecture 7 — Constructors, Destructors, Copy Constructor</h3>
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">07</span>
+            </div>
+            <ul class="space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside mb-4">
+              <li><strong class="text-slate-800 dark:text-slate-200">Constructor:</strong> دالة عضو خاصة تُستدعى تلقائياً عند إنشاء object؛ اسمها نفس اسم class ولا تملك return type.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Default constructor:</strong> constructor لا يحتاج معاملات. يمكن عمل overloading للـ constructors.</li>
+              <li>إذا لم يكتب المبرمج أي constructor، يوفر المترجم default constructor وفق الحالة الموضحة بالمحاضرة.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Destructor:</strong> اسمه اسم الكلاس مسبوق بـ <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">~</code>، لا يعيد قيمة ولا يأخذ معاملات، ويُستدعى تلقائياً عند تدمير object لتحرير الموارد.</li>
+              <li>بالنطاق المحلي، destructors تعمل بترتيب عكسي لترتيب constructors.</li>
+              <li><strong class="text-slate-800 dark:text-slate-200">Copy constructor:</strong> ينشئ object جديداً بالاعتماد على object موجود من النوع نفسه. الصيغة الشائعة: <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/50">ClassName(const ClassName&amp; other)</code>.</li>
+            </ul>
+            <div class="code-box" data-code="class Point {
+    int x, y;
+public:
+    Point() : x(0), y(0) {}
+    Point(int a, int b) : x(a), y(b) {}
+    Point(const Point& p) : x(p.x), y(p.y) {}
+    ~Point() { cout << &quot;Object destroyed&quot;; }
+};"></div>
+          </article>
+        </div>
+
+        <div class="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 p-4 text-xs sm:text-sm text-amber-800 dark:text-amber-300 flex items-start gap-2.5">
+          <span class="text-base">💡</span>
+          <p><strong>تنبيه علمي:</strong> المحاضرات تذكر المبادئ الأساسية أعلاه؛ أي تفصيل إضافي في الأمثلة التدريبية موضح بوصفه تطبيقاً تعليمياً للمفهوم.</p>
+        </div>
+      </section>
+
+      <!-- SECTION 2: MCQ -->
+      <section id="mcq" class="section space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="w-1.5 h-7 rounded-full bg-indigo-600"></span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">MCQ — 76 Questions</h2>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
+            اختر الإجابة الصحيحة ثم اضغط Reveal answer
+          </span>
+        </div>
+        <div id="mcqList" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 3: DEBUGGING -->
+      <section id="debug" class="section space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="w-1.5 h-7 rounded-full bg-rose-500"></span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">تصحيح البرامج | Debugging — 31</h2>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/60">
+            حدد الخطأ البرمجي ثم اعرض التصحيح
+          </span>
+        </div>
+        <div id="debugList" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 4: OUTPUT -->
+      <section id="output" class="section space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="w-1.5 h-7 rounded-full bg-amber-500"></span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">نواتج البرامج | Output — 30</h2>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60">
+            تتبع الكود واستنتج المخرجات قبل كشف الحل
+          </span>
+        </div>
+        <div id="outputList" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 5: TRUE/FALSE -->
+      <section id="tf" class="section space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="w-1.5 h-7 rounded-full bg-emerald-500"></span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">True / False — 30</h2>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            اختبر صحة المفاهيم النظرية والعملية
+          </span>
+        </div>
+        <div id="tfList" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 6: 110 PROGRAMS -->
+      <section id="programs" class="section space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="w-1.5 h-7 rounded-full bg-indigo-600"></span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">برامج مهمة لكل موضوع | 110 Programs</h2>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+            10 تمارين محلولة لكل موضوع (11 موضوعاً)
+          </span>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="space-y-3 bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div class="relative">
+            <svg class="w-5 h-5 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="search" id="programSearch" placeholder="ابحث عن موضوع أو برنامج / Search programs..." class="w-full pr-11 pl-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+          </div>
+          <!-- Topic Pills -->
+          <div id="topicFilterPills" class="flex flex-wrap gap-1.5" dir="ltr"></div>
+        </div>
+
+        <div id="programList" class="space-y-4"></div>
+      </section>
+
+      <!-- SECTION 7: CLASS PROGRAMS -->
+      <section id="classes" class="section space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="w-1.5 h-7 rounded-full bg-violet-600"></span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Class Programs — 30 Comprehensive Programs</h2>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/60">
+            تطبيقات شاملة للكلاسات والـ Constructors
+          </span>
+        </div>
+        <div id="classList" class="space-y-4"></div>
+      </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="no-print text-center py-6 text-sm text-slate-500 dark:text-slate-400">
+      <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <span data-ar="تصميم الطالب" data-en="Designed by">تصميم الطالب</span>
+        <a href="https://www.instagram.com/b9.is/" target="_blank" rel="noopener" class="font-extrabold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+          <span>بكر جاسم حسن</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<!-- Toast Notification for Copy -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-indigo-600 text-white text-xs font-bold shadow-xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2">
+  <span>✔</span>
+  <span data-ar="تم نسخ الكود بنجاح!" data-en="Code copied to clipboard!">تم نسخ الكود بنجاح!</span>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+let lang = 'ar';
+let selectedTopic = 'ALL';
+const answeredMcqs = new Map(); // index -> isCorrect
+
+// 1. Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('oop_theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+}
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('oop_theme', isDark ? 'dark' : 'light');
+}
+initTheme();
+
+// 2. Language Management
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  $('#langBtn').textContent = lang === 'ar' ? 'English' : 'العربية';
+  document.querySelectorAll('[data-ar]').forEach(el => {
+    el.textContent = el.dataset[lang];
+  });
+  // Update sidebar slide direction for mobile
+  const sidebar = $('#sidebar');
+  if (lang === 'en') {
+    sidebar.classList.remove('right-0', 'border-l', 'translate-x-full');
+    sidebar.classList.add('left-0', 'border-r', '-translate-x-full');
+  } else {
+    sidebar.classList.remove('left-0', 'border-r', '-translate-x-full');
+    sidebar.classList.add('right-0', 'border-l', 'translate-x-full');
+  }
+}
+
+// 3. Navigation & Mobile Drawer
+function openSection(target) {
+  const wanted = document.getElementById(target);
+  if (!wanted) return;
+  document.querySelectorAll('.section').forEach(sec => sec.classList.toggle('active', sec === wanted));
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const isActive = btn.dataset.target === target;
+    if (isActive) {
+      btn.className = 'nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-500/20';
+    } else {
+      btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all';
+    }
+  });
+  closeMobileMenu();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openMobileMenu() {
+  const sidebar = $('#sidebar');
+  sidebar.classList.remove('translate-x-full', '-translate-x-full');
+  $('#mobileBackdrop').classList.remove('hidden');
+}
+
+function closeMobileMenu() {
+  const sidebar = $('#sidebar');
+  if (window.innerWidth < 1024) {
+    sidebar.classList.add(lang === 'ar' ? 'translate-x-full' : '-translate-x-full');
+  }
+  $('#mobileBackdrop').classList.add('hidden');
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => openSection(btn.dataset.target));
+});
+$('#menuToggle')?.addEventListener('click', openMobileMenu);
+
+// 4. C++ Code Formatter, Syntax Highlighter & Copy Helper
+function esc(s) {
+  return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+}
+
+function formatCpp(code) {
+  let clean = code.trim();
+  // Preserve preprocessor directives on their own lines
+  clean = clean.replace(/(#include\s*<[^>]+>|#include\s*"[^"]+")/g, '$1\n');
+  clean = clean.replace(/(using\s+namespace\s+std\s*;)/g, '$1\n');
+
+  let out = "", indent = 0, paren = 0, inString = false, quote = "", line = "", inComment = false;
+  const pad = () => "    ".repeat(Math.max(0, indent));
+  const flush = () => {
+    let t = line.trim();
+    if (t) out += pad() + t + "\n";
+    line = "";
+  };
+
+  for (let i = 0; i < clean.length; i++) {
+    const c = clean[i], next = clean[i + 1], prev = clean[i - 1];
+
+    if (inComment) {
+      if (c === "\n") { inComment = false; flush(); }
+      else line += c;
+      continue;
+    }
+    if (!inString && c === "/" && next === "/") {
+      inComment = true;
+      line += "//";
+      i++;
+      continue;
+    }
+    if (inString) {
+      line += c;
+      if (c === quote && prev !== "\\") inString = false;
+      continue;
+    }
+    if (c === '"' || c === "'") {
+      inString = true;
+      quote = c;
+      line += c;
+      continue;
+    }
+    if (c === "(") paren++;
+    if (c === ")") paren--;
+
+    if (c === "{") {
+      line = line.trimEnd() + " {";
+      flush();
+      indent++;
+    } else if (c === "}") {
+      flush();
+      indent = Math.max(0, indent - 1);
+      line = "}";
+      let j = i + 1;
+      while (j < clean.length && /\s/.test(clean[j])) j++;
+      if (clean[j] === ";") { line += ";"; i = j; }
+      flush();
+    } else if (c === ";" && paren === 0) {
+      line += ";";
+      flush();
+    } else if (c === "\n") {
+      flush();
+    } else if (/\s/.test(c)) {
+      if (line && !line.endsWith(" ")) line += " ";
+    } else {
+      line += c;
+    }
+  }
+  flush();
+  return out.replace(/\b(public|private|protected)\s*:/g, (m) => "\n" + m).replace(/\n{3,}/g, "\n\n").trim();
+}
+
+function highlightCpp(code) {
+  let html = esc(code);
+  // Comments
+  html = html.replace(/(\/\/[^\n]*)/g, '<span class="cpp-com">$1</span>');
+  // Preprocessor
+  html = html.replace(/(#include\s*&lt;[^&]+&gt;|#include\s*&quot;[^&]+&quot;)/g, '<span class="cpp-pp">$1</span>');
+  // Strings & Chars
+  html = html.replace(/(&quot;[^&]*&quot;|'[^']*')/g, '<span class="cpp-str">$1</span>');
+  // Keywords
+  html = html.replace(/\b(class|struct|public|private|protected|return|if|else|for|while|do|switch|case|default|break|continue|using|namespace|const|static|new|delete|true|false)\b/g, '<span class="cpp-kw">$1</span>');
+  // Types
+  html = html.replace(/\b(int|double|float|char|void|bool|string|long|short|unsigned)\b/g, '<span class="cpp-type">$1</span>');
+  // Numbers
+  html = html.replace(/\b(\d+(\.\d+)?)\b/g, '<span class="cpp-num">$1</span>');
+  return html;
+}
+
+function renderCodeBlock(rawCode, autoFormat = true) {
+  const formatted = autoFormat ? formatCpp(rawCode) : rawCode.trim();
+  const encoded = encodeURIComponent(formatted);
+  return `
+    <div class="relative group my-3 rounded-xl overflow-hidden border border-slate-800 bg-slate-950 shadow-inner" dir="ltr">
+      <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-900 border-b border-slate-800 text-[11px] font-mono text-slate-400">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+          <span class="ml-1.5 text-slate-400">C++</span>
+        </span>
+        <button type="button" onclick="copyCode(this, '${encoded}')" class="no-print px-2.5 py-1 rounded-md bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition flex items-center gap-1 text-[11px] font-sans font-semibold">
+          <span>📋</span> <span>نسخ</span>
+        </button>
+      </div>
+      <pre class="p-4 text-xs sm:text-sm font-mono leading-relaxed text-slate-100 overflow-x-auto m-0"><code>${highlightCpp(formatted)}</code></pre>
+    </div>
+  `;
+}
+
+function copyCode(btn, encoded) {
+  const text = decodeURIComponent(encoded);
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    const toast = $('#toast');
+    toast.classList.remove('opacity-0', 'translate-y-2');
+    toast.classList.add('opacity-100', 'translate-y-0');
+    setTimeout(() => {
+      toast.classList.add('opacity-0', 'translate-y-2');
+      toast.classList.remove('opacity-100', 'translate-y-0');
+    }, 2000);
+  } catch (e) {}
+  document.body.removeChild(ta);
+}
+
+// Render summary static code boxes
+document.querySelectorAll('.code-box').forEach(box => {
+  box.innerHTML = renderCodeBlock(box.dataset.code, false);
+});
+
+// 5. MCQ Data & Interactive Progress
+const mcqs=[
+["Which header is commonly used for C++ input and output?","<iostream>","<cmath>","<string>","<fstream>",0,"The lecture examples use iostream for cin and cout."],
+["Which header declares common mathematical functions such as pow?","<iostream>","<cmath>","<vector>","<iomanip>",1,"Math functions are declared in cmath."],
+["What is the main purpose of a function?","Store only constants","Perform a specific task","Create an object only","End a program",1,"A function is a reusable chunk of code for a task."],
+["Top-down design means:","Combining all code in main","Dividing a problem into smaller tasks","Avoiding functions","Using only classes",1,"The main problem is divided into smaller subtasks."],
+["A function consists mainly of:","Header and body","Class and object","Array and loop","Public and private",0,"The function header and function body."],
+["Which is a valid function header?","double tax(double income)","tax double income","double tax = income","function tax(double)",0,"Return type, name, and parameter list."],
+["What does void indicate as a return type?","Returns an integer","Returns a character","Returns no value","Returns true only",2,"void functions do not return a value."],
+["What is a function prototype used for?","To call destructor","To declare a function signature before use","To create an array","To hide a class",1,"It informs the compiler of type, name and parameters."],
+["What does pow(2,3) calculate?","2+3","2*3","2 raised to power 3","3 raised to power 2",2,"pow is a standard math function."],
+["Which operator is the conditional/ternary operator?","::","?:","&&","%=",1,"Its form is condition ? expr1 : expr2."],
+["How many expressions/operands does the ternary operator use?","One","Two","Three","Four",2,"It is called ternary because it takes three operands."],
+["In condition ? A : B, when is A evaluated?","When condition is true","When condition is false","Always","Never",0,"The first expression is selected for true."],
+["Which expression selects the smaller of y and z?","y<z ? y : z","y>z ? y : z","y+z","y=z",0,"If y is smaller, return y; otherwise z."],
+["A default parameter provides:","A required pointer","A value used when an argument is omitted","A return type","A private member",1,"It supplies a default argument."],
+["Default parameters must be placed:","At the beginning only","After all non-default parameters","Anywhere","Only in main",1,"Only trailing arguments may be defaulted."],
+["Given int f(int x,int y=4), f(3) uses:","y=0","y=3","y=4","Compilation always fails",2,"The omitted second argument uses 4."],
+["Which call is valid for void f(int a=2,int b=3)?","f()","f(1)","f(1,2)","All of these",3,"All three calls provide valid trailing argument omissions."],
+["An object is best described as:","An instance of a type/class","A header file","A loop","A function prototype",0,"An instance of a class/type is an object."],
+["Which is an OOP benefit?","Code reuse","More duplicated code","No modularity","No debugging",0,"Code reuse is a stated benefit."],
+["Which is one of the OOP principles listed in the lecture?","Encapsulation","Compilation","Iteration","Linking",0,"Encapsulation, inheritance and polymorphism."],
+["Function overloading means:","Same function name with different parameter lists","Same return type only","Same body in every class","Calling a function twice",0,"Overloads differ in number or types of parameters."],
+["Can two functions be overloaded by return type only?","Yes","No","Only in main","Only if static",1,"The lecture says return type alone is insufficient."],
+["How does the compiler choose an overloaded function?","By matching arguments","By choosing the longest name","Randomly","By source file size",0,"It matches argument number and types."],
+["Which pair is a valid overload?","int f(int); double f(double);","int f(int); double f(int);","int f(); int f();","void f(int); void f(int);",0,"Parameter types differ."],
+["In call-by-reference, which symbol is used in the parameter?","*","&","%","#",1,"The ampersand marks a reference parameter."],
+["Call-by-value passes:","The original variable alias","A copy of the argument","A class object only","A pointer always",1,"Changes affect the copy only."],
+["A reference parameter can:","Modify the original argument","Only read constants","Create a new class","Destroy main",0,"It refers to the original variable."],
+["A structure is created using:","object","struct","private","static",1,"The struct keyword declares a structure."],
+["An array stores:","Only different data types","Similar data types","Only functions","Only objects",1,"Arrays store elements of similar type."],
+["A structure can group:","Only integers","Different data types","Only functions","Only strings",1,"Structures group possibly dissimilar data."],
+["A structure can contain:","Data members and member functions","Only constructors","Only private members","Only arrays",0,"Both data and functions may be members."],
+["By default, struct members are:","private","protected","public","static",2,"Struct defaults to public access."],
+["By default, class members are:","public","private","protected","global",1,"Class defaults to private."],
+["Which access specifier allows access from outside through an object?","private","protected","public","local",2,"Public members are accessible externally."],
+["A private member is directly accessible:","From any function","Only within class/authorized mechanisms","From all objects","From main only",1,"Private restricts direct external access."],
+["Protected members are accessible in:","Derived classes","Any unrelated external function","Only main","All objects directly",0,"Protected supports derived-class access."],
+["Encapsulation means:","Grouping data and functions in one unit","Deleting objects","Using only global variables","Overloading operators",0,"Encapsulation combines data and behavior."],
+["Data hiding mainly means:","Making all members public","Restricting direct access to internal data","Removing member functions","Using arrays",1,"Private members and controlled public functions implement hiding."],
+["A class is a:","Blueprint for objects","Single statement","Loop condition","Library",0,"Objects are instances of a class."],
+["The scope resolution operator is:","->","::","&&","?:",1,"It defines class functions outside the class and accesses scope."],
+["A function defined inside a class is inline by default:","True","False","Only destructor","Only static",0,"The lecture states this default."],
+["A static data member has:","A separate copy per object","One shared instance for the class","No storage","Local scope only",1,"Static member is shared by all objects."],
+["Preferred access to static member P::c is:","P.c","P->c","P::c","c.P",2,"Use class name and scope resolution."],
+["A constructor is called:","Manually only","Automatically when an object is created","When program compiles","When header is included",1,"Constructor runs during object initialization."],
+["A constructor name must be:","main","Same as class","Any name","~Class",1,"Constructor has the same name as its class."],
+["A constructor has:","An int return type","No return type","A void return type","A bool return type",1,"Constructors have no return type."],
+["A default constructor takes:","No arguments","Exactly two arguments","One pointer","A return value",0,"It requires no arguments."],
+["A class may have multiple constructors through:","Function overloading","Inheritance only","Ternary operator","Arrays",0,"Constructor overloading provides different initializations."],
+["A destructor name begins with:","!","~","&","::",1,"Destructor uses tilde prefix."],
+["A destructor can have arguments:","Yes, many","No","Only one","Only default",1,"Destructors cannot have arguments."],
+["A destructor returns:","int","void","No return value/type","bool",2,"A destructor has no return value."],
+["Destructors are generally called:","Automatically when object is destroyed","Before constructors","Only by cin","At every loop iteration",0,"They are automatic at end of lifetime/scope."],
+["For local objects, destruction order is:","Same as construction","Reverse construction order","Alphabetical","Random",1,"Destructors run in reverse order."],
+["A copy constructor initializes:","A new object from another object of same class","An integer from a float","A global variable","A destructor",0,"It creates a copy from an existing object."],
+["Which is the conventional copy constructor signature?","Point(Point other)","Point(const Point& other)","void Point()","~Point(Point&)",1,"A const reference parameter is the common form."],
+["What is the output of (65>23)?65+4:23-3?","62","69","65","20",1,"65>23 is true, so 65+4=69."],
+["What does f(5) use for int f(int n,int k=2)?","k=0","k=1","k=2","Compilation error",2,"The default value is 2."],
+["Which is not a valid overload distinction?","Different parameter types","Different parameter count","Different return type only","Both A and B",2,"Return type alone cannot distinguish overloads."],
+["Which member function is usually used to assign private data?","setter","destructor","prototype","header",0,"A setter controls assignment."],
+["Which member function is usually used to retrieve private data?","getter","constructor only","main","operator",0,"A getter/accessor reads data."],
+["Which statement about class and struct is correct in C++?","Both default to private","Class defaults private; struct defaults public","Struct cannot have functions","Class cannot have objects",1,"This is the key default access difference."],
+["Which call accesses a public member function?","obj.show()","obj::show","show.obj","class.show()",0,"Member functions are called through an object."],
+["What does ::print() refer to inside a member function?","A global print function","A private data member","A constructor","A local variable",0,"Leading :: selects external/global scope."],
+["A class may contain a member object of:","Another class","Only its own class","Only int","No other type",0,"Classes can contain objects of other classes."],
+["Which is a valid declaration of an object of class Point?","Point p;","class Point p();","object Point;","new Point;",0,"Point p declares an object."],
+["Which is a valid out-of-class member definition?","void Point::print() {}","Point.print void() {}","void ::Point print() {}","print Point() {}",0,"Use ClassName::member."],
+["In the BankAccount example, why validate deposit amount?","To prevent invalid values","To overload function","To create static data","To print class name",0,"Controlled access protects balance."],
+["If balance is 30, withdraw(50) should:","Set balance to -20","Report insufficient balance","Destroy account","Double balance",1,"The example rejects withdrawal greater than balance."],
+["Which OOP benefit means objects can be maintained independently?","Modularity","Ternary","Destructor","Default parameter",0,"Modularity separates components."],
+["Which is a Boolean return type?","int","bool","char","double",1,"bool represents true or false."],
+["Which function header has a double return type?","double computeTax(double income)","computeTax double","void double tax()","int computeTax(double)",0,"The first token is the return type."],
+["Which function call passes j by reference if changeIt is declared void changeIt(int &p)?","changeIt(j)","changeIt(&j)","changeIt(*j)","changeIt(int j)",0,"Reference syntax is in the parameter declaration, not call."],
+["Which statement is true about static members?","They are shared among class objects","Each object owns a separate copy","They must be private","They are local variables",0,"One shared class-level member."],
+["Which one is an example of data hiding?","private: int age; public: setAge()","public: int age;","global int age;","int age in main",0,"Private data with controlled public access."],
+["What does the destructor commonly release?","Resources allocated by object","Function names","Header files","Return values",0,"It releases resources such as allocated memory."],
+["Which statement about default arguments is correct?","Only trailing parameters may have defaults","All parameters must have defaults","Defaults go only in main","Defaults change return type",0,"Defaulted arguments must be trailing."]
+];
+
+function updateMcqStats() {
+  const total = mcqs.length;
+  const answered = answeredMcqs.size;
+  let correct = 0;
+  answeredMcqs.forEach(v => { if (v) correct++; });
+  $('#mcqProgressText').textContent = `${answered} / ${total}`;
+  $('#mcqScoreText').textContent = correct;
+  $('#mcqProgressBar').style.width = `${Math.round((answered / total) * 100)}%`;
+}
+
+function selectMcqOption(btn, qIdx, optIdx, ansIdx) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('button').forEach(b => {
+    b.classList.remove('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-950/50', 'text-emerald-800', 'dark:text-emerald-200', 'border-rose-500', 'bg-rose-50', 'dark:bg-rose-950/50', 'text-rose-800', 'dark:text-rose-200');
+  });
+  const isCorrect = optIdx === ansIdx;
+  if (isCorrect) {
+    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-950/50', 'text-emerald-800', 'dark:text-emerald-200');
+  } else {
+    btn.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-950/50', 'text-rose-800', 'dark:text-rose-200');
+  }
+  answeredMcqs.set(qIdx, isCorrect);
+  updateMcqStats();
+}
+
+function resetMcqProgress() {
+  answeredMcqs.clear();
+  updateMcqStats();
+  renderMcqList();
+}
+
+function renderMcqList() {
+  $('#mcqList').innerHTML = mcqs.map((q, i) => {
+    const opts = q.slice(1, 5);
+    const ans = q[5];
+    return `
+      <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5 transition hover:border-indigo-300 dark:hover:border-indigo-800">
+        <div class="flex items-start gap-3 mb-3.5" dir="ltr">
+          <span class="shrink-0 px-2.5 py-0.5 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-mono text-xs font-bold mt-0.5">Q${i + 1}</span>
+          <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base leading-snug">${esc(q[0])}</h3>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" dir="ltr">
+          ${opts.map((o, j) => `
+            <button type="button" onclick="selectMcqOption(this, ${i}, ${j}, ${ans})" class="text-left px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-indigo-400 dark:hover:border-indigo-500 transition flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono text-xs font-bold flex items-center justify-center shrink-0">${String.fromCharCode(65 + j)}</span>
+              <span>${esc(o)}</span>
+            </button>
+          `).join('')}
+        </div>
+        <div class="mt-3.5 flex items-center justify-between" dir="ltr">
+          <button type="button" onclick="this.parentElement.nextElementSibling.classList.toggle('hidden')" class="no-print text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+            <span>👁️ Reveal answer</span>
+          </button>
+        </div>
+        <div class="answer hidden mt-3 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs sm:text-sm text-emerald-900 dark:text-emerald-200" dir="ltr">
+          <div class="font-bold mb-1">✔ Answer: ${String.fromCharCode(65 + ans)}. ${esc(opts[ans])}</div>
+          <div class="text-emerald-700 dark:text-emerald-300/90">${esc(q[6] || '')}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+renderMcqList();
+updateMcqStats();
+
+// 6. Debugging Section
+const debugItems=[
+["Missing semicolon","int main(){ int x=5 cout << x; }","int main(){ int x=5; cout << x; }","A declaration must end with a semicolon."],
+["Wrong return type","void square(int x){ return x*x; }","int square(int x){ return x*x; }","A function returning a value needs a compatible return type."],
+["Missing prototype","int main(){ cout << sum(2,3); } int sum(int a,int b){return a+b;}","int sum(int,int); int main(){ cout << sum(2,3); } int sum(int a,int b){return a+b;}","Declare the function before it is used, or define it earlier."],
+["Wrong ternary syntax","int m = (a>b) a : b;","int m = (a>b) ? a : b;","The conditional operator requires ? and :."],
+["Default argument in wrong position","void f(int a=2, int b);","void f(int a, int b=2);","Only trailing arguments may be defaulted."],
+["Overload differs only by return type","int value(int x); double value(int x);","int value(int x); double value(double x); // Use different parameter lists","Return type alone cannot overload a function."],
+["Reference marker missing","void change(int x){x=9;} // intended to change original","void change(int &x){x=9;}","Use a reference parameter to modify the original variable."],
+["Structure keyword typo","structure Student { int id; };","struct Student { int id; };","The C++ keyword is struct."],
+["Wrong class access","class A { int x; }; int main(){A a; a.x=3;}","class A { public: int x; }; int main(){A a; a.x=3;}","Class members are private by default; expose intentionally with public."],
+["Private data accessed externally","class A{private:int x;}; int main(){A a;a.x=2;}","class A{private:int x; public:void setX(int v){x=v;}}; int main(){A a;a.setX(2);}","Use a public member function to control private data."],
+["Wrong scope resolution","void Point.print(){ }","void Point::print(){ }","Use :: to define a member function outside the class."],
+["Static member lacks definition","class P{public:static int count;};","class P{public:static int count;}; int P::count=0;","A static data member generally needs one out-of-class definition."],
+["Constructor has return type","class A{public:void A(){}};","class A{public:A(){}};","A constructor has no return type."],
+["Constructor name mismatch","class Box{public:Boxx(){}};","class Box{public:Box(){}};","Constructor name must match class name exactly."],
+["Destructor has parameters","class A{public:~A(int x){}};","class A{public:~A(){}};","A destructor cannot have parameters."],
+["Destructor missing tilde","class A{public:A(){ } A(){ }};","class A{public:A(){ } ~A(){ }};","Destructor uses ~ before the class name."],
+["Incorrect copy constructor parameter","class A{public:A(A other){}};","class A{public:A(const A& other){}};","Use a reference parameter; passing by value would require copying."],
+["Calling private function","class A{void show(){}}; int main(){A a;a.show();}","class A{public:void show(){}}; int main(){A a;a.show();}","Make the function public if external code must call it."],
+["Missing braces","int main(){ if(x>0) cout<<x; else cout<<0;","int main(){ if(x>0){cout<<x;} else {cout<<0;} }","This item requires closing the main function body."],
+["Wrong comparison assignment","if(fees=300) cout<<\"private\";","if(fees>300) cout<<\"private\";","Use comparison >, not assignment =."],
+["Wrong logical validation","if(amount>0 || amount<100)","if(amount>0 && amount<100)","For a range where both conditions must hold, use &&."],
+["Missing return in non-void function","int get(){ int x=4; }","int get(){ int x=4; return x; }","A non-void function must return a value on all relevant paths."],
+["Wrong object member syntax","p::print();","p.print();","Call a non-static member function through the object with dot."],
+["Wrong static access syntax in example","P.c='A';","P::c='A';","Use scope resolution for a class static member."],
+["Member data used before declaration","class A{public:void set(int v){x=v;} };","class A{int x; public:void set(int v){x=v;} };","Declare the data member inside the class."],
+["Function parameter type mismatch","int add(int a,int b); int main(){cout<<add(2.5,3.5);}","int add(int a,int b); int main(){cout<<add(2,3);}","Pass arguments matching the declared parameter types for the intended result."],
+["Incorrect default call","int power(int n,int k=2); power(5,2,1);","int power(int n,int k=2); power(5,2);","The call must not pass more arguments than declared."],
+["Missing semicolon after class","class A { public: int x; }","class A { public: int x; };","A class definition ends with a semicolon."],
+["Calling object as function","Point p; p(2,3);","Point p(2,3);","Use constructor syntax when creating an object."],
+["Incorrect private getter","class A{private:int x; public:void get(){cout<<y;}};","class A{private:int x; public:int get(){return x;}};","The getter should access the declared private member and return it."],
+["Bad destructor return type","class A{public:void ~A(){}};","class A{public:~A(){}};","A destructor has no return type."]
+];
+
+$('#debugList').innerHTML = debugItems.map((x, i) => `
+  <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5" dir="ltr">
+    <div class="flex items-center gap-2.5 mb-2">
+      <span class="px-2.5 py-0.5 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 font-mono text-xs font-bold">#${i + 1}</span>
+      <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">${esc(x[0])}</h3>
+    </div>
+    ${renderCodeBlock(x[1], false)}
+    <button type="button" onclick="this.nextElementSibling.classList.toggle('hidden')" class="no-print px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-2xs">
+      🛠 Show correction
+    </button>
+    <div class="answer hidden mt-3 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60">
+      <div class="text-xs font-bold text-emerald-800 dark:text-emerald-300 mb-1">✔ Correct code:</div>
+      ${renderCodeBlock(x[2], true)}
+      <p class="text-xs sm:text-sm text-emerald-800 dark:text-emerald-200 mt-2">${esc(x[3])}</p>
+    </div>
+  </div>
+`).join('');
+
+// 7. Output Section
+const outputItems=[
+["int x=65,y=23; cout << ((x>y)?x+4:y-3);","69","65 > 23 is true, so x+4."],
+["int j=4; void change(int &p){p+=2;} change(j); cout<<j;","6","Reference changes original j."],
+["int j=4; void change(int p){p=7;} change(j); cout<<j;","4","Value parameter is a copy."],
+["int x=3; cout<<pow(x,2);","9","3 squared."],
+["int n=5,k=2; cout<<n*k;","10","Multiplication."],
+["int x=4; cout<<(x%2==0);","1","Boolean true prints as 1 by default."],
+["int x=5; cout<<(x%2==0 ? \"Even\":\"Odd\");","Odd","5 is not divisible by 2."],
+["int a=7,b=9; cout<<((a>b)?a:b);","9","The second operand is selected."],
+["int f(int n,int k=2){return n*k;} cout<<f(5);","10","Default k is 2."],
+["int f(int n,int k=2){return n+k;} cout<<f(5,3);","8","Explicit k=3 overrides default."],
+["int max(int a,int b){return a>b?a:b;} cout<<max(4,8);","8","Returns larger integer."],
+["int x=2; int &r=x; r=10; cout<<x;","10","r is another name for x."],
+["struct P{int x,y;}; P p; p.x=2;p.y=6; cout<<p.x+p.y;","8","2+6."],
+["class A{public:int x;}; A a;a.x=12;cout<<a.x;","12","Public data is accessible."],
+["class A{int x;public:void set(int v){x=v;}int get(){return x;}}; A a;a.set(7);cout<<a.get();","7","Setter stores 7; getter returns it."],
+["class A{public:static int n;}; int A::n=3; A x,y; A::n++; cout<<y.n;","4","Static member is shared."],
+["class P{public:void show(){cout<<\"Hi\";}}; P p;p.show();","Hi","Member function is called through object."],
+["class P{int x;public:P():x(5){} int get(){return x;}}; P p;cout<<p.get();","5","Default constructor initializes x."],
+["class P{int x;public:P(int a):x(a){} int get(){return x;}}; P p(11);cout<<p.get();","11","Parameterized constructor receives 11."],
+["class A{public:A(){cout<<\"C\";}~A(){cout<<\"D\";}}; int main(){A a;}","CD","Constructor first, destructor when scope ends."],
+["class A{public:A(int n){cout<<n; }~A(){cout<<\"X\";}}; int main(){A a(2);A b(3);}","23XX","Objects constructed in order, destroyed in reverse."],
+["int f(int x){return x*x;} cout<<f(4);","16","4 squared."],
+["int a=10; a-=3; cout<<a;","7","Compound subtraction."],
+["int x=1; for(int i=0;i<3;i++) x+=i; cout<<x;","4","x becomes 1+0+1+2."],
+["int x=8; cout<<(x>5?1:0);","1","Condition is true."],
+["void f(int a=4){cout<<a;} f();","4","Default argument is used."],
+["void f(int a=4){cout<<a;} f(9);","9","Explicit argument replaces default."],
+["class A{int x;public:void set(int a){x=a;}void show(){cout<<x;}};A a;a.set(20);a.show();","20","The public method accesses private x."],
+["int x=3; int y=++x; cout<<x<<y;","44","Pre-increment changes x before assignment."],
+["int x=3; int y=x++; cout<<x<<y;","43","Post-increment assigns old x then increments x."]
+];
+
+$('#outputList').innerHTML = outputItems.map((x, i) => `
+  <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5" dir="ltr">
+    <div class="flex items-center gap-2.5 mb-2">
+      <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-mono text-xs font-bold">#${i + 1}</span>
+      <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Find the output</h3>
+    </div>
+    ${renderCodeBlock(x[0], true)}
+    <button type="button" onclick="this.nextElementSibling.classList.toggle('hidden')" class="no-print px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-2xs">
+      💻 Reveal output
+    </button>
+    <div class="answer hidden mt-3 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs sm:text-sm text-emerald-900 dark:text-emerald-200">
+      <div class="font-mono font-bold text-base mb-1">Output: ${esc(x[1])}</div>
+      <div class="text-emerald-700 dark:text-emerald-300/90">${esc(x[2])}</div>
+    </div>
+  </div>
+`).join('');
+
+// 8. True / False Section
+const tf=[
+["A C++ function can be a reusable chunk of code.","True","The lecture defines a function as a chunk of code."],
+["The cmath library declares common math functions.","True","pow is shown with cmath."],
+["A function header contains the function name and parameter list.","True","It also includes return type."],
+["void means the function returns an integer.","False","void means no returned value."],
+["The ternary operator uses three operands.","True","condition ? expr1 : expr2."],
+["The second expression of ?: is selected when condition is false.","False","The third expression is selected when false."],
+["Default parameters may only be trailing arguments.","True","This is explicitly stated in Lecture 2."],
+["f(5) is valid for int f(int n,int k=2).","True","k uses its default value."],
+["Overloaded functions must have different return types only.","False","Parameter lists must differ."],
+["Two functions can be overloaded by different parameter types.","True","The compiler matches arguments."],
+["Call-by-reference can modify the original argument.","True","Reference parameter refers to original variable."],
+["Call-by-value always changes the original variable.","False","It modifies a copy."],
+["An array stores a set of similar data types.","True","As described in Lecture 4."],
+["A struct can group different data types.","True","It is a user-defined type."],
+["Struct members are private by default in C++.","False","Struct members are public by default."],
+["Class members are private by default in C++.","True","Unless specified otherwise."],
+["A class is a blueprint for its objects.","True","An object is an instance."],
+["private members can be accessed directly from main through an object.","False","Direct external access is prohibited."],
+["protected members are accessible in derived classes.","True","They are not directly accessible through ordinary external objects."],
+["Encapsulation groups data and functions into one unit.","True","Usually a class."],
+["Data hiding and encapsulation mean exactly the same thing.","False","Grouping versus restricting access."],
+["The :: operator is used for out-of-class member definitions.","True","Scope resolution operator."],
+["A static data member has a separate copy in every object.","False","It is shared by all objects."],
+["A static member can be accessed using ClassName::member.","True","This is the preferred form in the lecture."],
+["A constructor has the same name as its class.","True","And no return type."],
+["A constructor must return void.","False","It has no return type."],
+["A default constructor requires no arguments.","True","It initializes an object without arguments."],
+["A destructor name starts with a tilde.","True","For example ~Point()."],
+["A destructor can have parameters.","False","Destructors cannot have arguments."],
+["For local objects, destructors are called in reverse construction order.","True","As stated in Lecture 6."]
+];
+
+$('#tfList').innerHTML = tf.map((x, i) => `
+  <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5" dir="ltr">
+    <div class="flex items-start gap-3 mb-3">
+      <span class="shrink-0 px-2.5 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-bold mt-0.5">#${i + 1}</span>
+      <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">${esc(x[0])}</h3>
+    </div>
+    <button type="button" onclick="this.nextElementSibling.classList.toggle('hidden')" class="no-print px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-2xs">
+      ✔ Reveal answer
+    </button>
+    <div class="answer hidden mt-3 p-3.5 rounded-xl ${x[1] === 'True' ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200'} border text-xs sm:text-sm">
+      <strong>${esc(x[1])}</strong> — ${esc(x[2])}
+    </div>
+  </div>
+`).join('');
+
+// 9. 110 Programs Section with Search & Topic Pills
+const topics=[
+["Functions",["Write a function that returns the square of an integer.","Write a function that returns the cube of a number.","Write a void function that prints a greeting.","Write a function that returns the maximum of two integers.","Write a Boolean function that checks whether a number is odd.","Write a function that computes tax using the lecture rule.","Write a function that reads and returns an income value.","Write a function that prints a passed income tax.","Write a function that sums three numbers.","Write a function that tests whether a number is positive."],"#include <iostream>\nusing namespace std;\nint square(int n){ return n*n; }\nint main(){ cout << square(5); }"],
+["Conditional Operator",["Select the maximum of two numbers using ?:","Select the minimum of two numbers using ?:","Print Odd or Even using ?:","Assign pass/fail using a conditional expression.","Find the absolute value of an integer using ?:","Select the larger of three values using nested ?:","Use ?: to choose a tax message.","Use ?: to choose a positive/negative message.","Use ?: to choose the smaller age.","Rewrite a simple if/else assignment using ?:"] ,"#include <iostream>\nusing namespace std;\nint main(){ int a=8,b=5; int m=(a>b)?a:b; cout<<m; }"],
+["Default Parameters",["Create power(n,k=2) and call power(5).","Create a function with one default trailing parameter.","Create a function with two default trailing parameters.","Call f() where both parameters have defaults.","Call f(1) where two parameters have defaults.","Call f(1,2) where two parameters have defaults.","Create a greeting function with default name code.","Create area(length,width=1).","Create a tax function with default rate.","Demonstrate explicit argument overriding a default."],"#include <iostream>\nusing namespace std;\nint power(int n,int k=2){ int r=1; for(int i=0;i<k;i++) r*=n; return r; }\nint main(){ cout<<power(5)<<' '<<power(5,3); }"],
+["Function Overloading",["Overload max for int and double.","Overload area for circle and rectangle parameter lists.","Overload print for int and double.","Overload sum for two and three integers.","Overload volume for cube and cuboid.","Overload display with zero and one argument.","Overload compare for int and float.","Overload triple for int and double parameters.","Overload average for two and three values.","Demonstrate that return-type-only overload is invalid (commented example)."],"#include <iostream>\nusing namespace std;\nint max(int a,int b){return a>b?a:b;}\ndouble max(double a,double b){return a>b?a:b;}\nint main(){cout<<max(3,8)<<' '<<max(2.5,1.5);}"],
+["Reference Parameters",["Swap two integers using references.","Increase a value by 10 using reference.","Set a variable to zero using reference.","Return two calculated results through reference parameters.","Compare value and reference parameter behavior.","Create a function that doubles the original variable.","Create a function that updates two values.","Use a reference variable as an alias.","Pass an array element by reference to update it.","Demonstrate reference parameter in a class helper function."],"#include <iostream>\nusing namespace std;\nvoid swapValues(int &a,int &b){int t=a;a=b;b=t;}\nint main(){int x=2,y=7;swapValues(x,y);cout<<x<<' '<<y;}"],
+["Structures",["Create Student struct with name and age.","Create Point struct with x and y and print function.","Create Employee struct with id and salary.","Pass a structure to a function by value.","Create an array of three structure objects.","Create a structure with a member function.","Create Book struct with title and price.","Read and display two points.","Create a structure containing mixed data types.","Compare two structure values through a function."],"#include <iostream>\nusing namespace std;\nstruct Point{int x,y; void print(){cout<<x<<','<<y;}};\nint main(){Point p{2,5};p.print();}"],
+["Classes and Objects",["Create a class Point with init and print.","Create a class Rectangle with area function.","Create a class Student with public display.","Create two objects from one class.","Define a member function outside the class using ::.","Overload a member print function.","Create a class containing another class object.","Create getters and setters for private coordinates.","Create a class Employee and display details.","Demonstrate public and private access."],"#include <iostream>\nusing namespace std;\nclass Point{int x,y;public:void init(int a,int b){x=a;y=b;}void print(){cout<<'('<<x<<','<<y<<')';}};\nint main(){Point p;p.init(4,7);p.print();}"],
+["Encapsulation and Data Hiding",["Create Student with private name and age and public set/display.","Create BankAccount with private balance and deposit.","Add validation to reject negative deposits.","Add withdraw and insufficient-balance check.","Create Employee with private salary and getter.","Create Date class with controlled day/month/year assignment.","Create a class that validates age before storing.","Create a class with private data and public accessor.","Demonstrate invalid direct access as a comment.","Explain grouping versus access restriction in code comments."],"#include <iostream>\nusing namespace std;\nclass BankAccount{double balance;public:BankAccount():balance(0){}void deposit(double a){if(a>0)balance+=a;}double getBalance(){return balance;}};\nint main(){BankAccount b;b.deposit(50);cout<<b.getBalance();}"],
+["Static Members",["Create a class with static object counter.","Increment shared counter in constructor.","Display static count using ClassName::member.","Show two objects share one static variable.","Define a static data member outside the class.","Create a static class-wide tax rate.","Create a static member function to display count.","Compare static and non-static values.","Reset a shared static counter.","Trace shared static value across objects."],"#include <iostream>\nusing namespace std;\nclass Item{public:static int count;Item(){++count;}};\nint Item::count=0;\nint main(){Item a,b;cout<<Item::count;}"],
+["Constructors",["Create a default constructor initializing x and y to zero.","Create a parameterized constructor for Point.","Overload constructors with zero and two arguments.","Create Student constructor initializing id and age.","Create Rectangle constructor initializing dimensions.","Use constructor initializer list.","Create two objects with different constructor calls.","Demonstrate constructor call order with printed messages.","Create a class with a default value constructor.","Create a constructor that validates input before assignment."],"#include <iostream>\nusing namespace std;\nclass Point{int x,y;public:Point():x(0),y(0){}Point(int a,int b):x(a),y(b){}void show(){cout<<x<<','<<y;}};\nint main(){Point a;Point b(3,6);a.show();cout<<' ';b.show();}"],
+["Destructors and Copy Constructor",["Create a destructor that prints a message.","Trace construction and destruction of two local objects.","Create a copy constructor for Point.","Create an object and initialize another as its copy.","Demonstrate reverse destructor order.","Use destructor to release a dynamically allocated resource (advanced practice).","Create a class with constructor and destructor messages.","Pass an object by const reference to avoid an extra copy.","Demonstrate copy initialization syntax.","Write a class with default, parameterized and copy constructors."],"#include <iostream>\nusing namespace std;\nclass Point{int x;public:Point(int a):x(a){}Point(const Point &p):x(p.x){}~Point(){cout<<\"bye \";}void show(){cout<<x;}};\nint main(){Point a(5);Point b=a;b.show();}"]
+];
+
+let allPrograms = [];
+topics.forEach(t => t[1].forEach((task, j) => allPrograms.push({ topic: t[0], task, code: t[2], n: j + 1 })));
+
+function renderTopicPills() {
+  const pills = ['ALL', ...topics.map(t => t[0])];
+  $('#topicFilterPills').innerHTML = pills.map(t => {
+    const active = selectedTopic === t;
+    return `<button type="button" onclick="setTopicFilter('${t}')" class="px-3 py-1 rounded-lg text-xs font-bold transition ${active ? 'bg-indigo-600 text-white shadow-2xs' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-indigo-400'}">${t === 'ALL' ? 'All (110)' : t}</button>`;
+  }).join('');
+}
+
+function setTopicFilter(topic) {
+  selectedTopic = topic;
+  renderTopicPills();
+  renderPrograms();
+}
+
+function renderPrograms() {
+  const term = $('#programSearch').value.toLowerCase();
+  const filtered = allPrograms.filter(p => {
+    const matchesTopic = selectedTopic === 'ALL' || p.topic === selectedTopic;
+    const matchesSearch = (p.topic + ' ' + p.task).toLowerCase().includes(term);
+    return matchesTopic && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    $('#programList').innerHTML = `<div class="text-center py-10 text-slate-500 dark:text-slate-400 text-sm">لا توجد نتائج مطابقة لبحثك.</div>`;
+    return;
+  }
+
+  $('#programList').innerHTML = filtered.map(p => `
+    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5" dir="ltr">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <span class="px-2.5 py-0.5 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-mono text-xs font-bold">${esc(p.topic)} · ${p.n}/10</span>
+      </div>
+      <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base mb-2">${esc(p.task)}</h3>
+      ${renderCodeBlock(p.code, true)}
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 text-right" dir="rtl">الحل النموذجي يوضح النمط الأساسي للموضوع؛ عدّل المدخلات لتجربة حالات أخرى.</p>
+    </div>
+  `).join('');
+}
+
+renderTopicPills();
+$('#programSearch').addEventListener('input', renderPrograms);
+renderPrograms();
+
+// 10. 30 Comprehensive Class Programs
+const classTasks=[
+["Point class with private x,y; init() and print().","class Point{int x,y;public:void init(int a,int b){x=a;y=b;}void print(){cout<<'('<<x<<','<<y<<')';}}"],
+["Rectangle class with constructor and area().","class Rectangle{double w,h;public:Rectangle(double a,double b):w(a),h(b){}double area(){return w*h;}}"],
+["Student class with private name and age, setter and display.","class Student{string name;int age;public:void set(string n,int a){name=n;age=a;}void display(){cout<<name<<' '<<age;}}"],
+["Employee class with private name and salary and getters.","class Employee{string name;double salary;public:void set(string n,double s){name=n;salary=s;}string getName(){return name;}double getSalary(){return salary;}}"],
+["BankAccount with validated deposit and withdraw.","class BankAccount{double balance=0;public:void deposit(double a){if(a>0)balance+=a;}void withdraw(double a){if(a>0&&a<=balance)balance-=a;}double get(){return balance;}}"],
+["Class with default and parameterized constructors.","class Box{int value;public:Box():value(0){}Box(int v):value(v){}int get(){return value;}}"],
+["Constructor overloading for Point.","class Point{int x,y;public:Point():x(0),y(0){}Point(int a):x(a),y(a){}Point(int a,int b):x(a),y(b){}};"],
+["Copy constructor for a simple class.","class Number{int n;public:Number(int x):n(x){}Number(const Number& other):n(other.n){}int get(){return n;}};"],
+["Destructor message and object lifetime.","class Demo{public:Demo(){cout<<\"ctor\\n\";}~Demo(){cout<<\"dtor\\n\";}};"],
+["Static shared object counter.","class Counter{public:static int count;Counter(){count++;}}; int Counter::count=0;"],
+["Static member function to read count.","class Counter{static int count;public:Counter(){count++;}static int getCount(){return count;}};int Counter::count=0;"],
+["Member function defined outside class with scope resolution.","class Point{int x;public:void set(int);void show();};void Point::set(int a){x=a;}void Point::show(){cout<<x;}"],
+["Overloaded member display().","class Printer{public:void show(int x){cout<<x;}void show(double x){cout<<x;}};"],
+["Class containing an object of another class.","class Address{public:string city;};class Student{public:string name;Address address;};"],
+["Protected member in a base and derived class.","class Base{protected:int value;};class Child:public Base{public:void set(int x){value=x;}int get(){return value;}};"],
+["Encapsulated Date with basic validation.","class Date{int day,month,year;public:bool set(int d,int m,int y){if(d<1||d>31||m<1||m>12)return false;day=d;month=m;year=y;return true;}};"],
+["University class with Read, Show, Check and two objects.","class University{string name;int studentNo;double fees;public:void Read(string n,int s,double f){name=n;studentNo=s;fees=f;}void Show(){cout<<name<<' '<<studentNo<<' '<<fees<<endl;}void Check(){cout<<(fees>300?\"private\":\"Suitable\")<<endl;}};"],
+["Class with private data and public setter preventing negative age.","class Person{int age;public:bool setAge(int a){if(a<0)return false;age=a;return true;}int getAge(){return age;}};"],
+["Class with overloaded constructors and print.","class Item{int id;public:Item():id(0){}Item(int x):id(x){}void print(){cout<<id;}};"],
+["Class with two private values and a sum method.","class Pair{int a,b;public:void set(int x,int y){a=x;b=y;}int sum(){return a+b;}};"],
+["Class with a reference parameter setter.","class Value{int x;public:void update(int &v){x=v;v++;}int get(){return x;}};"],
+["Class that validates deposit and reports invalid amount.","class Wallet{double money=0;public:bool add(double x){if(x<=0)return false;money+=x;return true;}double balance(){return money;}};"],
+["Class with getter and setter for coordinates.","class Point{int x,y;public:void setX(int a){x=a;}void setY(int b){y=b;}int getX(){return x;}int getY(){return y;}};"],
+["Two objects with independent instance variables.","class Lamp{int level;public:Lamp(int x):level(x){}int get(){return level;}};"],
+["Static and non-static members comparison.","class Sample{int own;public:static int shared;Sample(int x):own(x){}int getOwn(){return own;}};int Sample::shared=0;"],
+["Destructor releasing dynamically allocated memory (advanced).","class Buffer{int *p;public:Buffer(int n){p=new int[n];}~Buffer(){delete[] p;}};"],
+["Copy constructor with independent simple value.","class Score{int value;public:Score(int v):value(v){}Score(const Score& s):value(s.value){}int get(){return value;}};"],
+["Nested object access through member chain.","class Y{public:char c;};class X{public:char c;Y y;};"],
+["Class with public menu-like operations and private balance.","class Account{double balance=0;public:void deposit(double x){if(x>0)balance+=x;}void withdraw(double x){if(x>0&&x<=balance)balance-=x;}void show(){cout<<balance;}};"],
+["Integrated class combining constructor, copy constructor, getters, setter and destructor.","class Record{int id;public:Record(int x=0):id(x){}Record(const Record& r):id(r.id){}void set(int x){id=x;}int get(){return id;}~Record(){}};"]
+];
+
+$('#classList').innerHTML = classTasks.map((x, i) => {
+  const fullCode = `#include <iostream>\n#include <string>\nusing namespace std;\n${x[1]}\nint main() {\n    // create objects and test the class here\n    return 0;\n}`;
+  return `
+    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 p-5" dir="ltr">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="px-2.5 py-0.5 rounded-lg bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 font-mono text-xs font-bold">Class Program ${i + 1}/30</span>
+      </div>
+      <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base mb-2">${esc(x[0])}</h3>
+      ${renderCodeBlock(fullCode, true)}
+    </div>
+  `;
+}).join('');
+</script>
+</body>
+</html>
